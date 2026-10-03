@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Prioritizing Content Refresh Interventions: An Out-of-Domain ML Validation Audit on 143k Organic URLs</title>
+  <style>
+    :root {
+      --primary: #1a365d;
+      --accent: #2b6cb0;
+      --text: #2d3748;
+      --bg: #ffffff;
+      --bg-alt: #f7fafc;
+      --border: #e2e8f0;
+      --code-bg: #edf2f7;
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      line-height: 1.65;
+      color: var(--text);
+      background-color: var(--bg);
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 40px 20px;
+    }
+    header {
+      border-bottom: 2px solid var(--border);
+      padding-bottom: 30px;
+      margin-bottom: 40px;
+    }
+    h1 {
+      font-size: 2.25rem;
+      color: var(--primary);
+      line-height: 1.25;
+      margin-bottom: 15px;
+    }
+    .author-meta {
+      font-size: 1rem;
+      color: #718096;
+      margin-bottom: 20px;
+    }
+    .abstract {
+      background-color: var(--bg-alt);
+      border-left: 4px solid var(--accent);
+      padding: 20px 25px;
+      border-radius: 4px;
+      font-style: normal;
+      margin-bottom: 30px;
+    }
+    .abstract h3 {
+      margin-top: 0;
+      color: var(--primary);
+      font-size: 1.1rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    h2 {
+      color: var(--primary);
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 8px;
+      margin-top: 40px;
+      font-size: 1.5rem;
+    }
+    h3 {
+      color: var(--accent);
+      margin-top: 25px;
+      font-size: 1.2rem;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+      font-size: 0.95rem;
+    }
+    th, td {
+      border: 1px solid var(--border);
+      padding: 10px 14px;
+      text-align: left;
+    }
+    th {
+      background-color: var(--bg-alt);
+      font-weight: 600;
+    }
+    .metric-badge {
+      background: #ebf8ff;
+      color: #2b6cb0;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-weight: bold;
+    }
+    code {
+      background: var(--code-bg);
+      padding: 2px 5px;
+      border-radius: 3px;
+      font-size: 0.9em;
+      font-family: SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    }
+    ul, ol {
+      padding-left: 25px;
+    }
+    li {
+      margin-bottom: 8px;
+    }
+    footer {
+      border-top: 2px solid var(--border);
+      margin-top: 50px;
+      padding-top: 25px;
+      font-size: 0.9rem;
+      color: #718096;
+    }
+    a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+    .callout {
+      background: #fffaf0;
+      border-left: 4px solid #dd6b20;
+      padding: 15px 20px;
+      margin: 20px 0;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+
+  <header>
+    <h1>Prioritizing Content Refresh Interventions: An Out-of-Domain ML Validation Audit on 143k Organic URLs</h1>
+    <div class="author-meta">
+      <strong>Muhammad Faheem Inayat</strong> &bull; Machine Learning Engineering Capstone &bull; October 2026
+    </div>
+
+    <!-- 1. TITLE + ABSTRACT -->
+    <div class="abstract">
+      <h3>Abstract</h3>
+      <p>
+        Editorial teams facing tens of thousands of decaying organic URLs lack scalable, objective methods to prioritize refresh interventions under strict sprint capacity constraints. We formulate organic content recovery as a classification ranking task across 143,206 content URLs from 45 client web properties in the FlyRank data warehouse, benchmarked strictly across unseen domains. Using pre-cutoff March 2026 Google Search Console engagement and ranking signals, our Histogram Gradient Boosting model achieved 0.6724 ROC-AUC and 0.8200 Precision@100 on 12 held-out client domains, delivering a 3.4x precision lift over rule-based CTR gap heuristics (0.2400) and a 4.4x lift over the catalog baseline (18.36%). We demonstrate that unstratified random splits leak client authority, inflating performance by 0.0754 ROC-AUC, and provide an operational triage playbook that categorizes candidates into actionable editorial archetypes while filtering out zero-click SERP feature traps. All findings are framed as decision-support heuristics using defensible, non-causal language.
+      </p>
+    </div>
+  </header>
+
+  <!-- 2. INTRODUCTION / PROBLEM STATEMENT -->
+  <section>
+    <h2>1. Introduction & Problem Statement</h2>
+    <p>
+      Managing large-scale enterprise content portfolios involves ongoing organic performance decay caused by search engine algorithm updates, competitor publishing, and shifting user search intent. While updating and refreshing existing content is substantially more cost-effective than drafting net-new articles, editorial teams operate under finite production bandwidth (typically 100 to 200 URLs per monthly sprint).
+    </p>
+    <p>
+      Existing industry workflows rely heavily on uncalibrated rules of thumb—such as filtering for URLs ranking on Page 2 with high impressions—or naive random data splits that overstate predictive certainty. This paper evaluates whether gradient-boosted decision trees trained on trailing search signals can reliably rank content recovery candidates across entirely unseen client domains, transforming passive observational search logs into an operational editorial action playbook.
+    </p>
+  </section>
+
+  <!-- 3. DATA -->
+  <section>
+    <h2>2. Data Provenance & Cohort Exclusions</h2>
+    <p>
+      This investigation uses data from the FlyRank ML Internship Data Warehouse (<code>fact_content_daily_performance</code>), aggregating 79 million daily records across 45 unique client web domains.
+    </p>
+    <ul>
+      <li><strong>Observation Window (Pre-Cutoff Features)</strong>: March 1, 2026 to March 31, 2026 (<code>month=2026-03</code>).</li>
+      <li><strong>Outcome Window (Ground Truth Target)</strong>: April 1, 2026 to April 30, 2026 (<code>month=2026-04</code>).</li>
+      <li><strong>Inclusion / Exclusion Rules</strong>: URLs were required to have active Search Console reporting (<code>gsc_data_available IS TRUE</code>) and a minimum threshold of &ge; 10 March impressions to remove unindexed crawl noise.</li>
+      <li><strong>Cohort Scale</strong>: The filtered dataset encompasses 143,206 content URLs with an empirical recovery base rate of 18.90%.</li>
+      <li><strong>Public Safety & Anonymization</strong>: In compliance with strict privacy and security standards, client domains and URL paths are represented exclusively via irreversible cryptographic hashes (<code>client_hash_id</code>, <code>content_hash_id</code>). Zero proprietary client URLs or raw search queries appear in this study.</li>
+    </ul>
+  </section>
+
+  <!-- 4. METHODOLOGY -->
+  <section>
+    <h2>3. Methodology & Validation Design</h2>
+    <p>
+      The objective is formulated as predicting whether an eligible URL will achieve organic click recovery (defined as <code>april_clicks &gt; march_clicks</code>, label <code>target_rebound = 1</code>).
+    </p>
+    <h3>Feature Engineering</h3>
+    <p>Eight strictly pre-cutoff features were derived from March 2026 data:</p>
+    <ul>
+      <li><code>clicks</code>, <code>impressions</code>: Monthly search volume volume indicators.</li>
+      <li><code>avg_position</code>: Weighted average ranking on Google Search.</li>
+      <li><code>ctr</code>: Realized click-through rate.</li>
+      <li><code>organic_sessions</code>, <code>avg_engagement_sec</code>: Post-click user retention and GA4 engagement metrics.</li>
+      <li><code>active_days</code>: Temporal consistency of search visibility.</li>
+      <li><code>ctr_gap</code>: Deficit between expected position CTR and realized CTR.</li>
+    </ul>
+
+    <h3>Validation Design & Leakage Controls</h3>
+    <p>
+      To prevent optimistic bias, we implemented a <strong>Client-Grouped Split</strong> (<code>GroupShuffleSplit</code>) holding out 25% of client domains entirely:
+    </p>
+    <ul>
+      <li><strong>Training Cohort</strong>: 110,318 URLs across 33 client web properties (19.07% base rate).</li>
+      <li><strong>Out-of-Domain Holdout Test Cohort</strong>: 32,888 URLs across 12 unseen client web properties (18.36% base rate).</li>
+      <li><strong>Leakage Prevention</strong>: Grouping strictly by client guarantees that the model cannot exploit domain-level authority, brand strength, or sitewide template structures. All features observe a strict temporal boundary (&le; 2026-03-31), preventing forward-looking target contamination.</li>
+    </ul>
+  </section>
+
+  <!-- 5. RESULTS -->
+  <section>
+    <h2>4. Results: Model vs. Heuristic Baseline</h2>
+    <p>
+      We evaluated a Histogram Gradient Boosting Classifier against a standard multiplicative heuristic baseline (combining log search volume, CTR gap, and position weighting) on the identical 32,888 held-out out-of-domain URLs:
+    </p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Prioritization Approach</th>
+          <th>ROC-AUC</th>
+          <th>PR-AUC</th>
+          <th>Precision@100</th>
+          <th>Precision@500</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Week-4 Heuristic Baseline</strong></td>
+          <td>0.6227</td>
+          <td>0.2390</td>
+          <td>0.2400 (24.0%)</td>
+          <td>0.2340 (23.4%)</td>
+        </tr>
+        <tr>
+          <td><strong>Histogram Gradient Boosting (ML)</strong></td>
+          <td><span class="metric-badge">0.6724</span></td>
+          <td><span class="metric-badge">0.3095</span></td>
+          <td><span class="metric-badge">0.8200 (82.0%)</span></td>
+          <td><span class="metric-badge">0.5700 (57.0%)</span></td>
+        </tr>
+        <tr>
+          <td><strong>Observed Lift</strong></td>
+          <td><strong>+0.0497</strong></td>
+          <td><strong>+0.0705</strong></td>
+          <td><strong>+58.0% pts (3.4x)</strong></td>
+          <td><strong>+33.6% pts (2.4x)</strong></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="callout">
+      <strong>Key Finding</strong>: In a realistic sprint capacity tier of 100 articles, the ML prioritization queue achieved an observed <strong>82.0% precision</strong> (82 of 100 articles rebounded in April), compared to only 24.0% for the baseline rule and 18.36% for random catalog triage.
+    </div>
+
+    <h3>Quantifying Domain Leakage</h3>
+    <p>
+      Evaluating the identical model architecture under an unstratified random row split yielded an inflated <strong>0.7458 ROC-AUC</strong>. Transitioning to the honest client-grouped partition produced a measured drop of <strong>-0.0754 ROC-AUC</strong> to 0.6704. This delta provides empirical confirmation that random row splitting leaks client-level domain characteristics, creating an overly optimistic evaluation.
+    </p>
+  </section>
+
+  <!-- 6. LIMITATIONS & HONEST FRAMING -->
+  <section>
+    <h2>5. Limitations & Honest Framing</h2>
+    <p>
+      In keeping with defensive ML engineering principles, we clearly delineate the operational boundaries of this study:
+    </p>
+    <ul>
+      <li><strong>Observational, Non-Causal Grounding</strong>: The dataset is drawn from observational search traffic logs without randomized editorial intervention controls. The model identifies statistical correlations associated with natural recovery trajectories; it does not prove that executing an editorial refresh causes traffic rebound.</li>
+      <li><strong>Analysis of Top-100 Failure Modes</strong>: Among the top 100 model-prioritized candidates, exactly 18 URLs failed to rebound in April. These false positives averaged 1,629 impressions, 16.2 baseline clicks, an average rank of 5.13, and a high predicted score of 0.8414. Investigation revealed these failures stem primarily from zero-click SERP feature displacement (such as AI Overviews, knowledge cards, and sponsored blocks) where top-ranking pages experience zero organic clickthrough regardless of content freshness.</li>
+      <li><strong>Cold-Start Absence</strong>: The system cannot score net-new articles or unindexed pages with fewer than 10 historical search impressions.</li>
+    </ul>
+  </section>
+
+  <!-- 7. RANKED RECOMMENDATIONS (PLAYBOOK) -->
+  <section>
+    <h2>6. Ranked Recommendations: Operational Action Playbook</h2>
+    <p>
+      Priority scores are synthesized into an operational triage playbook that routes candidates to specific editorial workflows:
+    </p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Reason Code / Archetype</th>
+          <th>Recommended Action</th>
+          <th>Test Volume</th>
+          <th>Operational Focus</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>PAGE_ONE_SNIPPET_DECAY</code></td>
+          <td><strong>OPTIMIZE_SERP_SNIPPET_AND_SCHEMA</strong></td>
+          <td>9,979 (69 in Top 100)</td>
+          <td>Page 1 URLs with weak CTR; rewrite title tags and deploy structured FAQ/How-To schema markup.</td>
+        </tr>
+        <tr>
+          <td><code>AUTHORITY_CTR_DEFICIT</code></td>
+          <td><strong>OVERHAUL_METADATA_AND_HOOK</strong></td>
+          <td>7,698 (26 in Top 100)</td>
+          <td>High-demand queries (&ge; 1,000 impressions); rewrite intros and realign search intent.</td>
+        </tr>
+        <tr>
+          <td><code>STRIKING_DISTANCE_STALENESS</code></td>
+          <td><strong>CONTENT_FRESHNESS_AND_INTERNAL_LINKS</strong></td>
+          <td>1,572 (1 in Top 100)</td>
+          <td>Page 2 rankings (pos 11–20); inject internal link equity and update references to cross onto Page 1.</td>
+        </tr>
+        <tr>
+          <td><code>LOW_VOLUME_TAIL</code></td>
+          <td><strong>MONITOR_BACKLOG</strong></td>
+          <td>13,639 (4 in Top 100)</td>
+          <td>Low search volume; retain in passive monitoring to avoid wasting sprint budget.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>Mandatory Human Review Gates</h3>
+    <ol>
+      <li><strong>SERP Feature Verification</strong>: Verify on live Google results that the URL is not displaced by AI Overviews or knowledge cards.</li>
+      <li><strong>Brand & Legal Review</strong>: Ensure historical product lines or compliance statements remain accurate.</li>
+      <li><strong>Cannibalization Audit</strong>: Confirm that a newer internal URL has not cannibalized this query cluster.</li>
+    </ol>
+
+    <h3>Automated No-Go List</h3>
+    <p>
+      Programmatic automation is strictly prohibited for identified zero-click SERP outliers (e.g., URLs with &ge; 5,000 impressions, average rank &le; 2.0, but near-zero CTR &le; 0.05%), YMYL health/legal topics, and discontinued business offerings.
+    </p>
+  </section>
+
+  <!-- 8. REPRODUCIBILITY -->
+  <section>
+    <h2>7. Reproducibility & Code Receipts</h2>
+    <p>
+      Every finding, table, and metric reported in this research paper is completely reproducible through version-controlled notebooks and exported receipts:
+    </p>
+    <ul>
+      <li><strong>Source Repository</strong>: <a href="https://github.com/Muhammadfaheem8988/FlyRank-AI-internship" target="_blank">github.com/Muhammadfaheem8988/FlyRank-AI-internship</a></li>
+      <li><strong>Capstone Notebook</strong>: <code>work/notebooks/capstone.ipynb</code></li>
+      <li><strong>Validation Audit Notebook</strong>: <code>work/notebooks/w06_validation_audit.ipynb</code></li>
+      <li><strong>Action Playbook Notebook</strong>: <code>work/notebooks/w07_action_playbook.ipynb</code></li>
+      <li><strong>Exported Verification Receipts</strong>: <code>work/outputs/capstone_verified_metrics.json</code></li>
+    </ul>
+  </section>
+
+  <!-- 9. ACKNOWLEDGMENTS & DATA CREDIT -->
+  <footer>
+    <h2>8. Acknowledgments & Data Credit</h2>
+    <p>
+      This research was conducted as part of the FlyRank AI Machine Learning Fellowship track. Built on the FlyRank ML Internship dataset &bull; <a href="https://flyrank.ai" target="_blank">https://flyrank.ai</a>.
+    </p>
+    <p>&copy; 2026 Muhammad Faheem Inayat. All rights reserved.</p>
+  </footer>
+
+</div>
+
+</body>
+</html>
