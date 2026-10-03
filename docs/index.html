@@ -138,23 +138,23 @@
       <strong>Muhammad Faheem Inayat</strong> &bull; Machine Learning Engineering Capstone &bull; October 2026
     </div>
 
-    <!-- 1. TITLE + ABSTRACT -->
+<!-- 1. TITLE + ABSTRACT (With FlyRank Content Case Study Framing) -->
     <div class="abstract">
       <h3>Abstract</h3>
       <p>
-        Editorial teams facing tens of thousands of decaying organic URLs lack scalable, objective methods to prioritize refresh interventions under strict sprint capacity constraints. We formulate organic content recovery as a classification ranking task across 143,206 content URLs from 45 client web properties in the FlyRank data warehouse, benchmarked strictly across unseen domains. Using pre-cutoff March 2026 Google Search Console engagement and ranking signals, our Histogram Gradient Boosting model achieved 0.6724 ROC-AUC and 0.8200 Precision@100 on 12 held-out client domains, delivering a 3.4x precision lift over rule-based CTR gap heuristics (0.2400) and a 4.4x lift over the catalog baseline (18.36%). We demonstrate that unstratified random splits leak client authority, inflating performance by 0.0754 ROC-AUC, and provide an operational triage playbook that categorizes candidates into actionable editorial archetypes while filtering out zero-click SERP feature traps. All findings are framed as decision-support heuristics using defensible, non-causal language.
+        Enterprise SEO workflows at FlyRank confront a core resource allocation bottleneck: among tens of thousands of decaying content URLs across diverse client domains, editorial bandwidth is strictly limited to 100–200 monthly interventions. This study functions as an operational case study evaluating whether machine learning can prioritize content refresh candidates more reliably than industry CTR deficit heuristics. Using 79 million Search Console logs across 143,206 content URLs from 45 client web properties, we evaluate a Histogram Gradient Boosting model strictly out-of-domain on 12 unseen client domains (32,888 URLs). The model achieved 0.6724 ROC-AUC and 0.8200 Precision@100, providing an observed 3.4x precision lift over rule-based CTR gap heuristics (0.2400) and a 4.4x lift over the catalog baseline (18.36%). Transitioning from a naive random split to an honest client-grouped partition eliminated a 0.0754 ROC-AUC domain leakage bias, yielding an operational triage playbook that categorizes refresh candidates while suppressing structural zero-click SERP traps.
       </p>
     </div>
   </header>
 
-  <!-- 2. INTRODUCTION / PROBLEM STATEMENT -->
+<!-- 2. INTRODUCTION / CASE STUDY PROBLEM STATEMENT -->
   <section>
-    <h2>1. Introduction & Problem Statement</h2>
+    <h2>1. Introduction & Problem Statement: The FlyRank Content Refresh Case Study</h2>
     <p>
-      Managing large-scale enterprise content portfolios involves ongoing organic performance decay caused by search engine algorithm updates, competitor publishing, and shifting user search intent. While updating and refreshing existing content is substantially more cost-effective than drafting net-new articles, editorial teams operate under finite production bandwidth (typically 100 to 200 URLs per monthly sprint).
+      At FlyRank, managing organic search visibility across client portfolios requires constantly counteracting organic traffic decay driven by Google core updates, competitor content refreshes, and evolving SERP features. While refreshing existing URLs offers a substantially lower marginal cost than producing net-new content, editorial operations operate under strict human capacity ceilings (typically 100 to 200 articles per monthly sprint). 
     </p>
     <p>
-      Existing industry workflows rely heavily on uncalibrated rules of thumb—such as filtering for URLs ranking on Page 2 with high impressions—or naive random data splits that overstate predictive certainty. This paper evaluates whether gradient-boosted decision trees trained on trailing search signals can reliably rank content recovery candidates across entirely unseen client domains, transforming passive observational search logs into an operational editorial action playbook.
+      Prior operational heuristics relied on static rule-of-thumb filters—such as targeting any Page 2 ranking with high search impressions and an underperforming CTR. In practice, these heuristics suffer from high false-positive rates due to unmeasured SERP feature shifts (e.g., Google AI Overviews and featured snippets fulfilling queries directly on the results page). This case study investigates whether a machine learning prioritization model trained on pre-cutoff Search Console and engagement signals can generalize across client boundaries to triage content refreshes accurately under real-world sprint constraints.
     </p>
   </section>
 
